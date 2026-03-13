@@ -1,17 +1,15 @@
 package com.practice.lld;
 
 /**
-
- Demonstrates thread coordination using wait() and notifyAll()
- to alternately print odd and even numbers.
-
- Key ideas:
- 1. Separate thread logic avoids a shared "God-function".
- 2. Thread-local counters eliminate the need for a shared counter.
- 3. synchronized provides happens-before visibility for isEvenTurn.
- 4. wait() guarded by while to handle spurious wakeups.
- 5. Dedicated monitor object prevents accidental lock contention.
-
+ * Demonstrates thread coordination using wait() and notifyAll()
+ * to alternately print odd and even numbers.
+ * <p>
+ * Key ideas:
+ * 1. Separate thread logic avoids a shared "God-function".
+ * 2. Thread-local counters eliminate the need for a shared counter.
+ * 3. synchronized provides happens-before visibility for isEvenTurn.
+ * 4. wait() guarded by while to handle spurious wakeups.
+ * 5. Dedicated monitor object prevents accidental lock contention.
  */
 
 
@@ -93,37 +91,31 @@ public class ThreadCoordinatedPrinter {
 }
 
 
-
-
-
-
 /**
-
- ---------------------------------------------
- DETAILED LEARNING NOTES
- ---------------------------------------------
-
- 1. Independent Logic Streams
- Intentionally decoupled printEven and printOdd into separate methods.
- This avoids the "God-function" trap and allows each thread’s logic (increments, data sources, or processing)
- to be extended independently without impacting the other.
-
- 2. Encapsulated Thread State:
- Each thread maintains its own local tracking variable (oddNum, evenNum).
- While a shared counter is safe within synchronized blocks, using local variables reduces the dependency
- between threads and simplifies the mental model for future logic changes (e.g., changing one thread to a different sequence).
-
- 3. JMM Visibility & Happens-Before:
- Correctly utilizes the synchronized monitor to establish a "happens-before" relationship.
- This ensures that the state of evenTurn is updated and visible to the next thread immediately
- upon the current thread exiting the monitor.
-
- 4. Defensive Synchronization:
- Uses the standard while loop for lock.wait() to effectively handle spurious wakeups
- and ensures the InterruptedException is handled by restoring the interrupt status rather than swallowing it.
-
- 5. Static Monitor Safety:
- Uses a dedicated static final Object as a lock. This is a best practice to avoid "lock contention" or
- accidental deadlocks that can occur when locking on this, a Class object, or interned Strings.
-
+ * ---------------------------------------------
+ * DETAILED LEARNING NOTES
+ * ---------------------------------------------
+ * <p>
+ * 1. Independent Logic Streams
+ * Intentionally decoupled printEven and printOdd into separate methods.
+ * This avoids the "God-function" trap and allows each thread’s logic (increments, data sources, or processing)
+ * to be extended independently without impacting the other.
+ * <p>
+ * 2. Encapsulated Thread State:
+ * Each thread maintains its own local tracking variable (oddNum, evenNum).
+ * While a shared counter is safe within synchronized blocks, using local variables reduces the dependency
+ * between threads and simplifies the mental model for future logic changes (e.g., changing one thread to a different sequence).
+ * <p>
+ * 3. JMM Visibility & Happens-Before:
+ * Correctly utilizes the synchronized monitor to establish a "happens-before" relationship.
+ * This ensures that the state of evenTurn is updated and visible to the next thread immediately
+ * upon the current thread exiting the monitor.
+ * <p>
+ * 4. Defensive Synchronization:
+ * Uses the standard while loop for lock.wait() to effectively handle spurious wakeups
+ * and ensures the InterruptedException is handled by restoring the interrupt status rather than swallowing it.
+ * <p>
+ * 5. Static Monitor Safety:
+ * Uses a dedicated static final Object as a lock. This is a best practice to avoid "lock contention" or
+ * accidental deadlocks that can occur when locking on this, a Class object, or interned Strings.
  */

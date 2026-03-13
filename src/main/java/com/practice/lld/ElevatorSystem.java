@@ -6,35 +6,35 @@ import lombok.Getter;
 import java.util.*;
 
 /**
- *  Elevator System Simulation
- *
- *  This program models a simplified multi-elevator control system.
- *  It focuses on elevator scheduling logic rather than UI or real hardware interaction.
- *
- *
- *  1. Controller
- *    - Receives external pickup requests (floor buttons).
- *    - Delegates elevator selection to a pluggable scheduling strategy.
- *
- *  2. Elevator
- *    - Maintains its own request queue and movement state.
- *    - Processes requests step-by-step in a tick-based simulation.
- *
- *  3. Scheduling Strategy (Strategy Pattern)
- *    - Allows different elevator assignment algorithms without modifying Controller.
- *    - Example strategies: nearest elevator, least-loaded elevator, zone-based scheduling.
- *
- *  4. Concurrency Model
- *    - Requests may be added concurrently by the controller while elevators process steps.
- *    - Elevator methods accessing the request structure are synchronized to ensure
- *      thread-safe compound operations.
- *
- *  5. Request Model
- *    - External requests: pickup (UP/DOWN button pressed on a floor)
- *    - Internal requests: drop (floor selected inside elevator)
- *
- *  This simulation demonstrates core elevator scheduling principles while keeping
- *  the implementation simple and extensible.
+ * Elevator System Simulation
+ * <p>
+ * This program models a simplified multi-elevator control system.
+ * It focuses on elevator scheduling logic rather than UI or real hardware interaction.
+ * <p>
+ * <p>
+ * 1. Controller
+ * - Receives external pickup requests (floor buttons).
+ * - Delegates elevator selection to a pluggable scheduling strategy.
+ * <p>
+ * 2. Elevator
+ * - Maintains its own request queue and movement state.
+ * - Processes requests step-by-step in a tick-based simulation.
+ * <p>
+ * 3. Scheduling Strategy (Strategy Pattern)
+ * - Allows different elevator assignment algorithms without modifying Controller.
+ * - Example strategies: nearest elevator, least-loaded elevator, zone-based scheduling.
+ * <p>
+ * 4. Concurrency Model
+ * - Requests may be added concurrently by the controller while elevators process steps.
+ * - Elevator methods accessing the request structure are synchronized to ensure
+ * thread-safe compound operations.
+ * <p>
+ * 5. Request Model
+ * - External requests: pickup (UP/DOWN button pressed on a floor)
+ * - Internal requests: drop (floor selected inside elevator)
+ * <p>
+ * This simulation demonstrates core elevator scheduling principles while keeping
+ * the implementation simple and extensible.
  */
 
 
@@ -66,13 +66,13 @@ public class ElevatorSystem {
 
 
 /**
- *  Represents static building configuration.
- *
- *  This class defines the valid floor range for the building.
- *  Elevators use this to validate incoming pickup and drop requests.
- *
- *  Keeping building configuration separate makes the system adaptable
- *  to buildings with different floor ranges.
+ * Represents static building configuration.
+ * <p>
+ * This class defines the valid floor range for the building.
+ * Elevators use this to validate incoming pickup and drop requests.
+ * <p>
+ * Keeping building configuration separate makes the system adaptable
+ * to buildings with different floor ranges.
  */
 class Building {
 
@@ -99,33 +99,33 @@ class Building {
 
 
 /**
- *  Represents the current movement direction of an elevator.
- *
- *  This enum is used internally by the elevator to determine
- *  movement and request servicing behavior.
+ * Represents the current movement direction of an elevator.
+ * <p>
+ * This enum is used internally by the elevator to determine
+ * movement and request servicing behavior.
  */
 enum Direction {UP, DOWN, IDLE}
 
 
 /**
- *  Represents the type of request stored in the elevator queue.
- *
- *  PICKUP_UP / PICKUP_DOWN
- *   - External requests generated when a user presses Up/Down button.
- *
- *  DROP
- *   - Internal request generated when a passenger inside the elevator
- *     selects a destination floor.
- *
- *  These types help the elevator decide whether it should serve a pickup
- *  request depending on its current movement direction.
+ * Represents the type of request stored in the elevator queue.
+ * <p>
+ * PICKUP_UP / PICKUP_DOWN
+ * - External requests generated when a user presses Up/Down button.
+ * <p>
+ * DROP
+ * - Internal request generated when a passenger inside the elevator
+ * selects a destination floor.
+ * <p>
+ * These types help the elevator decide whether it should serve a pickup
+ * request depending on its current movement direction.
  */
 enum RequestType {PICKUP_UP, PICKUP_DOWN, DROP}
 
 
 /**
  * Represents a stop request for an elevator.
- *
+ * <p>
  * Requests are stored inside the elevator's request map keyed by floor.
  * Multiple requests may exist for the same floor (e.g., pickup + drop).
  */
@@ -137,21 +137,21 @@ class Request {
 
 
 /**
- *  Represents a single elevator car.
- *
- *  Responsibilities:
- *  - Maintain its current state (floor, direction).
- *  - Store pending requests in a sorted structure.
- *  - Move one floor at a time during each simulation tick.
- *  - Decide when to stop based on request type and movement direction.
- *
- *  Requests are stored in a TreeMap so floors remain sorted,
- *  allowing efficient lookup of the next stop above or below.
- *
- *  Concurrency:
- *  - Requests may be added while the elevator processes movement steps.
- *  - Methods interacting with the request structure are synchronized
- *    to prevent concurrent modification during iteration.
+ * Represents a single elevator car.
+ * <p>
+ * Responsibilities:
+ * - Maintain its current state (floor, direction).
+ * - Store pending requests in a sorted structure.
+ * - Move one floor at a time during each simulation tick.
+ * - Decide when to stop based on request type and movement direction.
+ * <p>
+ * Requests are stored in a TreeMap so floors remain sorted,
+ * allowing efficient lookup of the next stop above or below.
+ * <p>
+ * Concurrency:
+ * - Requests may be added while the elevator processes movement steps.
+ * - Methods interacting with the request structure are synchronized
+ * to prevent concurrent modification during iteration.
  */
 @Getter
 class Elevator {
@@ -164,13 +164,13 @@ class Elevator {
 
     /**
      * Sorted structure of pending requests.
-     *
+     * <p>
      * Key   : floor number
      * Value : list of requests for that floor
-     *
+     * <p>
      * TreeMap is used so we can efficiently find:
-     *  - next stop above current floor  → higherKey()
-     *  - next stop below current floor  → lowerKey()
+     * - next stop above current floor  → higherKey()
+     * - next stop below current floor  → lowerKey()
      */
     private final TreeMap<Integer, List<Request>> requests = new TreeMap<>();
 
@@ -183,13 +183,13 @@ class Elevator {
 
     /**
      * Simulates one time tick for the elevator.
-     *
+     * <p>
      * During each step the elevator:
-     *  1. Stops at current floor if there are serviceable requests.
-     *  2. Determines direction if currently idle.
-     *  3. Adjusts direction if no more requests exist ahead.
-     *  4. Moves one floor in the chosen direction.
-     *
+     * 1. Stops at current floor if there are serviceable requests.
+     * 2. Determines direction if currently idle.
+     * 3. Adjusts direction if no more requests exist ahead.
+     * 4. Moves one floor in the chosen direction.
+     * <p>
      * The method is synchronized to prevent concurrent modification
      * of the request structure while processing requests.
      */
@@ -221,17 +221,17 @@ class Elevator {
 
         moveOneFloor();
 
-        System.out.println("(elevator: " + id + " floor: " + currentFloor + " dir: " + direction+")");
+        System.out.println("(elevator: " + id + " floor: " + currentFloor + " dir: " + direction + ")");
     }
 
     /**
-     *  Processes requests at the current floor.
-     *
-     *  Returns true if the elevator stopped at this floor.
-     *
-     *  We must use an Iterator instead of a for-each loop because
-     *  requests may be removed while iterating. Using Iterator.remove()
-     *  prevents ConcurrentModificationException.
+     * Processes requests at the current floor.
+     * <p>
+     * Returns true if the elevator stopped at this floor.
+     * <p>
+     * We must use an Iterator instead of a for-each loop because
+     * requests may be removed while iterating. Using Iterator.remove()
+     * prevents ConcurrentModificationException.
      */
     private boolean processCurrentFloor() {
 
@@ -264,12 +264,12 @@ class Elevator {
     }
 
     /**
-     *  Determines whether the elevator should serve a request at the current floor.
-     *
-     *  Drop requests are always served because the passenger is already inside.
-     *
-     *  Pickup requests are only served if the elevator is moving in the same
-     *  direction as the request to avoid inefficient direction reversals.
+     * Determines whether the elevator should serve a request at the current floor.
+     * <p>
+     * Drop requests are always served because the passenger is already inside.
+     * <p>
+     * Pickup requests are only served if the elevator is moving in the same
+     * direction as the request to avoid inefficient direction reversals.
      */
     private boolean shouldServe(Request request) {
 
@@ -294,10 +294,10 @@ class Elevator {
 
 
     /**
-     *  Determines the initial direction when the elevator is idle.
-     *
-     *  The elevator moves toward the nearest pending request
-     *  based on floor distance.
+     * Determines the initial direction when the elevator is idle.
+     * <p>
+     * The elevator moves toward the nearest pending request
+     * based on floor distance.
      */
     private void determineDirection() {
 
@@ -315,11 +315,11 @@ class Elevator {
     }
 
     /**
-     *  Reverses direction when there are no more requests ahead
-     *  in the current movement direction.
-     *
-     *  This ensures the elevator eventually serves requests that
-     *  exist behind it.
+     * Reverses direction when there are no more requests ahead
+     * in the current movement direction.
+     * <p>
+     * This ensures the elevator eventually serves requests that
+     * exist behind it.
      */
     private void adjustDirectionIfNeeded() {
 
@@ -350,10 +350,10 @@ class Elevator {
     }
 
     /**
-     *  Adds a new request to the elevator.
-     *
-     *  Synchronized to ensure thread-safe modification of the request map,
-     *  since requests may be added while the elevator is processing steps.
+     * Adds a new request to the elevator.
+     * <p>
+     * Synchronized to ensure thread-safe modification of the request map,
+     * since requests may be added while the elevator is processing steps.
      */
     synchronized boolean addRequest(Request request) {
         return requests.computeIfAbsent(request.floor, k -> new ArrayList<>()).add(request);
@@ -362,12 +362,12 @@ class Elevator {
 
 
 /**
- *  Central dispatcher responsible for assigning pickup requests
- *  to elevators.
- *
- *  The controller does not implement scheduling logic directly.
- *  Instead it delegates elevator selection to a scheduling strategy,
- *  allowing different algorithms to be plugged in easily.
+ * Central dispatcher responsible for assigning pickup requests
+ * to elevators.
+ * <p>
+ * The controller does not implement scheduling logic directly.
+ * Instead it delegates elevator selection to a scheduling strategy,
+ * allowing different algorithms to be plugged in easily.
  */
 class Controller {
 
@@ -388,7 +388,7 @@ class Controller {
         this.schedulingStrategy = schedulingStrategy;
     }
 
-    void step () {
+    void step() {
         for (Elevator elevator : elevators)
             elevator.step();
     }
@@ -429,16 +429,16 @@ class Controller {
 }
 
 /**
- *  Strategy interface for selecting an elevator to serve a pickup request.
- *
- *  This abstraction allows different scheduling algorithms to be used
- *  without modifying the Controller.
- *
- *  Example implementations:
- *  - Nearest elevator strategy
- *  - Direction-aware strategy
- *  - Least loaded elevator
- *  - Zone-based scheduling
+ * Strategy interface for selecting an elevator to serve a pickup request.
+ * <p>
+ * This abstraction allows different scheduling algorithms to be used
+ * without modifying the Controller.
+ * <p>
+ * Example implementations:
+ * - Nearest elevator strategy
+ * - Direction-aware strategy
+ * - Least loaded elevator
+ * - Zone-based scheduling
  */
 interface ElevatorSchedulingStrategy {
 
@@ -447,14 +447,14 @@ interface ElevatorSchedulingStrategy {
 
 
 /**
- *  Scheduling strategy that prefers elevators already moving toward the request.
- *
- *  Selection priority:
- *      1. Elevator already moving in the requested direction and heading toward the floor
- *      2. Nearest idle elevator
- *      3. Nearest elevator overall
- *
- *  This reduces unnecessary direction changes and improves efficiency.
+ * Scheduling strategy that prefers elevators already moving toward the request.
+ * <p>
+ * Selection priority:
+ * 1. Elevator already moving in the requested direction and heading toward the floor
+ * 2. Nearest idle elevator
+ * 3. Nearest elevator overall
+ * <p>
+ * This reduces unnecessary direction changes and improves efficiency.
  */
 class DirectionAwareNearestElevatorStrategy implements ElevatorSchedulingStrategy {
 

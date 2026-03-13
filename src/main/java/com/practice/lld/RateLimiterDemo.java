@@ -11,15 +11,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Rate Limiter Simulation
- *
+ * <p>
  * Demonstrates multiple endpoints with different rate limiters.
- *
+ * <p>
  * Highlights:
  * 1. Separate endpoints (userService, paymentService) each have their own limiter.
  * 2. Unregistered endpoints fall back to a default limiter.
  * 3. Tick-based simulation: multiple requests from same or different clients.
  * 4. Thread-safe per-client rate limiting.
- *
+ * <p>
  * Note: Sleep times simulate elapsed time between client requests.
  */
 
@@ -75,10 +75,10 @@ public class RateLimiterDemo {
 
 /**
  * Core RateLimiter supporting multiple endpoints.
- *
+ * <p>
  * - Maintains a map of endpoint → Limiter.
  * - Uses default limiter for any endpoint not explicitly registered.
- *
+ * <p>
  * Note:
  * - The map reference is final, so it cannot be reassigned.
  * - Its contents are mutable (ConcurrentHashMap), allowing dynamic registration of endpoints.
@@ -92,8 +92,8 @@ class RateLimiter {
 
         // Register known endpoints
         limiters = new ConcurrentHashMap<>(Map.of(
-                "userService", new TokenBucketLimiter(5,3, 3, Clock.systemUTC()),
-                "paymentService", new SlidingWindowLimiter(2,200, Clock.systemUTC())
+                "userService", new TokenBucketLimiter(5, 3, 3, Clock.systemUTC()),
+                "paymentService", new SlidingWindowLimiter(2, 200, Clock.systemUTC())
         ));
 
         // Default limiter for any unregistered endpoint
@@ -113,7 +113,7 @@ class RateLimiter {
 
 /**
  * Interface for rate limiting strategies.
- *
+ * <p>
  * Implementations (e.g., TokenBucketLimiter, SlidingWindowLimiter) handle per-client state
  * and enforce rate limits.
  */
@@ -124,17 +124,17 @@ interface Limiter {
 
 /**
  * Token Bucket Limiter implementation.
- *
+ * <p>
  * Uses per-client TokenBucket stored in a ConcurrentHashMap.
  * - Each bucket has its own ReentrantLock to synchronize token refill and consumption.
- *
+ * <p>
  * Why ReentrantLock over synchronized:
  * 1. Can implement tryLock() or timeout-based locking if needed.
  * 2. Offers fairness policies (first-come-first-served) in highly concurrent scenarios.
  * 3. Provides better observability and debugging compared to synchronized blocks.
- *
+ * <p>
  * initialTokens allows starting with a burst capacity.
- *
+ * <p>
  * Production note:
  * - Map can grow indefinitely; in a real system, evict inactive clients using TTL/LRU or external cache.
  */
@@ -178,11 +178,11 @@ class TokenBucketLimiter implements Limiter {
 
     /**
      * Represents a per-client token bucket.
-     *
+     * <p>
      * - tokens: current available tokens (can be fractional for precision).
      * - lastRefillTime: timestamp in millis of last refill.
      * - lock: ReentrantLock to safely update tokens and lastRefillTime.
-     *
+     * <p>
      * Using per-bucket lock instead of global lock ensures minimal contention
      * when multiple clients access the limiter concurrently.
      */
@@ -197,18 +197,18 @@ class TokenBucketLimiter implements Limiter {
 
 /**
  * Sliding Window Limiter implementation.
- *
+ * <p>
  * Maintains a deque of request timestamps per client.
- *
+ * <p>
  * Thread safety:
  * - Synchronized on each client’s RequestLog object.
  * - Ensures multiple threads can safely add or remove timestamps.
- *
+ * <p>
  * Production note / optimization:
  * - Using Deque for timestamps is simple but memory-heavy for high request volume.
  * - Better approach: Use a fixed-size circular bucket counter (e.g., 1-second buckets)
- *   to approximate sliding window while reducing memory footprint.
- *
+ * to approximate sliding window while reducing memory footprint.
+ * <p>
  * Map can also grow indefinitely; consider eviction strategies for long-lived systems.
  */
 @RequiredArgsConstructor
@@ -249,15 +249,15 @@ class SlidingWindowLimiter implements Limiter {
 
     /**
      * Holds per-client timestamps for sliding window.
-     *
+     * <p>
      * Uses ArrayDeque protected by ReentrantLock.
      * - Lock ensures thread safety, so we don't need ConcurrentLinkedDeque.
      * - More memory-efficient and faster than a concurrent deque for per-client logs.
-     *
+     * <p>
      * In high-throughput systems:
      * - Each timestamp is a long, so memory usage is O(requests).
      * - For very large request volume, consider circular fixed-size bucket counters
-     *   to approximate sliding window and reduce memory usage.
+     * to approximate sliding window and reduce memory usage.
      */
     static class RequestLog {
 
@@ -268,12 +268,12 @@ class SlidingWindowLimiter implements Limiter {
 
 /**
  * Result of a rate limit check.
- *
+ * <p>
  * Fields:
  * - allowed: true if request can proceed.
  * - remaining: number of requests remaining in current window or token count.
  * - retryAfterMs: time to wait before next allowed request (if not allowed).
- *
+ * <p>
  * toString() provides readable output for logging/testing.
  */
 @Getter
@@ -282,7 +282,7 @@ class RateLimitResult {
 
     private final boolean allowed;
     private final int remaining;
-    private final  long retryAfterMs;
+    private final long retryAfterMs;
 
     @Override
     public String toString() {

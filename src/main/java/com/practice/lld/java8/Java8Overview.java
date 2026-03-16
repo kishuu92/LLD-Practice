@@ -12,6 +12,10 @@ package com.practice.lld.java8;
  * - Method References
  * - Optional class
  * - New Date-Time API
+ *
+ * - Metaspace - replaced PermGem (was not dynamic)
+ * stores class name, method definition, field information, static variables
+ * bytecode of methods, runtime constant pool
  */
 
 public class Java8Overview {

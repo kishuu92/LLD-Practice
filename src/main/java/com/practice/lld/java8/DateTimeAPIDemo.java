@@ -5,31 +5,31 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Demonstrates the Java 8 Date-Time API (java.time package).
- *
+ * <p>
  * The old date-time classes (java.util.Date, Calendar, SimpleDateFormat)
  * had several problems:
- *
+ * <p>
  * 1. Mutable objects (not thread-safe)
  * 2. Confusing API design
  * 3. Poor timezone handling
  * 4. Difficult date manipulation
- *
+ * <p>
  * Java 8 introduced a new Date-Time API inspired by the Joda-Time library
  * to provide a more clear, immutable, and thread-safe way to handle dates and times.
- *
+ * <p>
  * Key classes:
- *
+ * <p>
  * LocalDate       -> date only (yyyy-mm-dd)
  * LocalTime       -> time only (hh:mm:ss)
  * LocalDateTime   -> date + time
  * ZonedDateTime   -> date + time + timezone
- *
+ * <p>
  * Utility classes:
- *
+ * <p>
  * Duration        -> time-based amount (hours, minutes)
  * Period          -> date-based amount (days, months, years)
  * DateTimeFormatter -> formatting/parsing dates
- *
+ * <p>
  * IMPORTANT:
  * All classes in java.time are immutable.
  * Any modification returns a NEW object instead of modifying the existing one.

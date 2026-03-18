@@ -19,11 +19,12 @@ Each design focuses on practical implementation and includes:
 
 ## Implemented Systems
 
-| System | Notes |
-|------|------|
-| Meeting Scheduler | Interval scheduling using TreeSet, room-level concurrency control |
-| Rate Limiter | Per-client rate limiting across endpoints with sliding window and token bucket algorithms |
-| Elevator System | Multi-elevator scheduling with pluggable strategy for request assignment |
-| Producer–Consumer | Multiple producers/consumers on shared buffer; implementations using BlockingQueue and wait/notify |
-| Thread Coordinated Tasks | Two threads coordinating work using wait/notify (odd-even execution model) |
-| (More coming) | |
+| System                   | Notes                                                                                                        |
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| Meeting Scheduler        | Interval scheduling using TreeSet, room-level concurrency control                                            |
+| Rate Limiter             | Per-client rate limiting across endpoints with sliding window and token bucket algorithms                    |
+| Elevator System          | Multi-elevator scheduling with pluggable strategy for request assignment                                     |
+| Parking Lot              | Scalable parking lot system with fine-grained concurrency control and extensible design via Strategy pattern |
+| Producer–Consumer        | Multiple producers/consumers on shared buffer; implementations using BlockingQueue and wait/notify           |
+| Thread Coordinated Tasks | Two threads coordinating work using wait/notify (odd-even execution model)                                   |
+| (More coming)            |                                                                                                              |

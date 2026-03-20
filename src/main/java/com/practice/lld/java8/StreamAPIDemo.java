@@ -63,6 +63,8 @@ public class StreamAPIDemo {
         joinStrings();
         factorialUsingReduce();
         checkAllMatch();
+        removeDuplicateCharacters();
+        mostFrequentCharacter();
     }
 
     /**
@@ -168,7 +170,7 @@ public class StreamAPIDemo {
         );
 
         List<String> flat = list.stream()
-                .flatMap(Collection::stream) // key concept
+                .flatMap(Collection::stream)
                 .toList();
 
         System.out.println(flat);
@@ -249,6 +251,45 @@ public class StreamAPIDemo {
                 .allMatch(n -> n > 2);
 
         System.out.println(allMatch);
+    }
+
+    /**
+     * removeDuplicateCharacters: removes duplicate characters from a string while preserving order
+     */
+    static void removeDuplicateCharacters() {
+
+        String input = "HelloHi";
+
+        String result = input.chars()
+                .distinct()
+                .collect(StringBuilder::new,
+                        StringBuilder::appendCodePoint,
+                        StringBuilder::append)
+                .toString();
+
+        System.out.println(result);
+    }
+
+    /**
+     * mostFrequentCharacter: finds the character with highest frequency in a string
+     */
+    static void mostFrequentCharacter() {
+
+        String input = "HelloHiHello";
+
+        Map<Character, Long> freq = input.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ));
+
+        char mostFreq = Collections.max(
+                freq.entrySet(),
+                Map.Entry.comparingByValue()
+        ).getKey();
+
+        System.out.println(mostFreq);
     }
 }
 

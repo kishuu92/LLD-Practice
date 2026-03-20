@@ -1,6 +1,12 @@
 package com.practice.lld.java8;
 
-/*
+import java.text.Collator;
+import java.util.List;
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+/**
  * Demonstrates Functional Interfaces in Java 8.
  *
  * Key points:
@@ -57,11 +63,50 @@ public class FunctionalInterfaceDemo {
 
         // Static method in functional interface
         MathOperation.describe();
+
+
+        /**
+         * Predicate is a predefined functional interface that
+         * takes one argument and return boolean value
+         * Mainly used for conditional testing
+         *
+         * boolean test(T t)
+         */
+        Predicate<Integer> isEven = (num) -> num % 2 == 0;
+        System.out.println(isEven.test(3));
+        System.out.println(isEven.test(4));
+
+        /**
+         * Function is a predefined functional interface that
+         * takes one input and return some output
+         * R apply(T t)
+         */
+        Function<String, Integer> stringLength = String::length;
+        System.out.println(stringLength.apply("Abhishek"));
+
+        BiFunction<Integer, Integer, Integer> multiply = (n1, n2) -> n1 * n2;
+        System.out.println(multiply.apply(7, 5));
+
+        /**
+         * Consumer is a predefined functional interface that
+         * takes one input and returns nothing
+         * accept(T t)
+         */
+        Consumer<Integer> consumer = (num) -> System.out.println(Math.pow(num, num));
+        consumer.accept(3);
+
+        /**
+         * Supplier is a predefined functional interface that
+         * does not take any input but returns a value
+         * T get()
+         */
+        Supplier<List<Integer>> supplier = () -> IntStream.rangeClosed(1, 10).boxed().toList();
+        System.out.println(supplier.get());
     }
 }
 
 
-/*
+/**
  * Example functional interface.
  *
  * Only one abstract method is allowed.
@@ -79,7 +124,7 @@ interface Task {
 }
 
 
-/*
+/**
  * Another functional interface example
  * used with lambda expressions.
  */

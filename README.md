@@ -27,4 +27,6 @@ Each design focuses on practical implementation and includes:
 | Parking Lot              | Scalable parking lot system with fine-grained concurrency control and extensible design via Strategy pattern |
 | Producer–Consumer        | Multiple producers/consumers on shared buffer; implementations using BlockingQueue and wait/notify           |
 | Thread Coordinated Tasks | Two threads coordinating work using wait/notify (odd-even execution model)                                   |
+| File System              |                                                                                                              |
+| Inventory Management     |                                                                                                              |
 | (More coming)            |                                                                                                              |

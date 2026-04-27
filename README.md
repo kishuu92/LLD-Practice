@@ -29,4 +29,5 @@ Each design focuses on practical implementation and includes:
 | Thread Coordinated Tasks | Two threads coordinating work using wait/notify (odd-even execution model)                                   |
 | File System              |                                                                                                              |
 | Inventory Management     |                                                                                                              |
+| Food Ordering System     |                                                                                                              |
 | (More coming)            |                                                                                                              |

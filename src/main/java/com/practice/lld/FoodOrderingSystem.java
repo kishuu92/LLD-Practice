@@ -89,9 +89,9 @@ class OrderItem {
 class Order {
 
     int id;
-    java.util.List<OrderItem> items;
+    List<OrderItem> items;
 
-    Order(int id, java.util.List<OrderItem> items) {
+    Order(int id, List<OrderItem> items) {
         this.id = id;
         this.items = items;
     }
@@ -111,7 +111,7 @@ class Restaurant {
     int capacity;
     int processingCount;
 
-    Restaurant(String name, java.util.List<MenuItem> items, int capacity) {
+    Restaurant(String name, List<MenuItem> items, int capacity) {
         this.name = name;
         this.capacity = capacity;
         this.processingCount = 0;
@@ -147,7 +147,7 @@ class Restaurant {
         return capacity - processingCount;
     }
 
-    void updateMenu(java.util.List<MenuItem> items) {
+    void updateMenu(List<MenuItem> items) {
         menu.clear();
         for (MenuItem item : items) {
             menu.put(item.name, item);
@@ -158,13 +158,13 @@ class Restaurant {
 
 class RestaurantService {
 
-    java.util.List<Restaurant> restaurants = new ArrayList<>();
+    List<Restaurant> restaurants = new ArrayList<>();
 
-    void addRestaurant(String name, java.util.List<MenuItem> menu, int capacity) {
+    void addRestaurant(String name, List<MenuItem> menu, int capacity) {
         restaurants.add(new Restaurant(name, menu, capacity));
     }
 
-    java.util.List<Restaurant> getAllRestaurants() {
+    List<Restaurant> getAllRestaurants() {
         return restaurants;
     }
 }
